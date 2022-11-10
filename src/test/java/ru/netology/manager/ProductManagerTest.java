@@ -9,6 +9,8 @@ import ru.netology.domain.Product;
 import ru.netology.domain.Smartphone;
 import ru.netology.repository.Repository;
 
+import static org.junit.jupiter.api.Assertions.*;
+
 
 class ProductManagerTest {
 
@@ -39,7 +41,7 @@ class ProductManagerTest {
         Product[] actual = manager.findAll();
         Product[] expected = {book1, book2, book3, smartphone1, smartphone2, smartphone3};
 
-        Assertions.assertArrayEquals(expected, actual);
+        assertArrayEquals(expected, actual);
     }
 
     @Test
@@ -48,7 +50,7 @@ class ProductManagerTest {
         Product[] actual = manager.searchBy("Ultra");
         Product[] expected = {smartphone1};
 
-        Assertions.assertArrayEquals(expected, actual);
+        assertArrayEquals(expected, actual);
     }
 
     @Test
@@ -57,7 +59,7 @@ class ProductManagerTest {
         Product[] actual = manager.searchBy("Pocket");
         Product[] expected = {book2, smartphone2};
 
-        Assertions.assertArrayEquals(expected, actual);
+        assertArrayEquals(expected, actual);
     }
 
     @Test
@@ -73,4 +75,36 @@ class ProductManagerTest {
 
         Assertions.assertEquals(expected, actual);
     }
+
+    //RICH
+    @Test
+    void shouldMatchesRichModelTrueTitle() {
+        assertTrue(ProductManager.matchesRichModel(smartphone1, "Galaxy"));
+    }
+
+    @Test
+    void shouldMatchesRichModelFalseTitle() {
+        assertFalse(ProductManager.matchesRichModel(smartphone3, "iPhone"));
+    }
+
+    @Test
+    void shouldMatchesRichModelTrueFoundAuthor() {
+        assertTrue(ProductManager.matchesRichModel(book1, "Елена Михалкова"));
+    }
+
+    @Test
+    void shouldMatchesRichModelFalseFoundAuthor() {
+        assertFalse(ProductManager.matchesRichModel(book1, "Перов"));
+    }
+
+    @Test
+    void shouldMatchesRichModelTrueFoundManufacturer() {
+        assertTrue(ProductManager.matchesRichModel(smartphone2, "Huawei"));
+    }
+
+    @Test
+    void shouldMatchesRichModelFalseFoundManufacturer() {
+        assertFalse(ProductManager.matchesRichModel(smartphone2, "HTC"));
+    }
+
 }
