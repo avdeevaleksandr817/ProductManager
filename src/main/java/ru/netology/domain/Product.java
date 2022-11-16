@@ -12,4 +12,8 @@ public class Product {
     protected int price;
     protected String title;
 
+    public boolean matches(String search) {
+        return getTitle().toUpperCase().contains(search.toUpperCase());
+    }
 }
+

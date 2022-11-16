@@ -45,4 +45,21 @@ public class ProductManager {
             return false;
         }
     }
+
+    public Product[] searchByTitleRichModel(String search) {
+        Product[] results = new Product[0];
+        for (Product product : repository.findAll()) {
+            if (matchesRichModel(product, search)) {
+                Product[] tmp = new Product[results.length + 1];
+                System.arraycopy(results, 0, tmp, 0, results.length);
+                tmp[results.length] = product;
+                results = tmp;
+            }
+        }
+        return results;
+    }
+
+    public static boolean matchesRichModel(Product product, String search) {
+        return product.matches(search);
+    }
 }
