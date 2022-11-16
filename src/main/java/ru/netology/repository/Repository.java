@@ -52,7 +52,4 @@ public class Repository {
         return items;
     }
 
-    public void setItems(Product[] items) {
-        this.items = items;
-    }
 }
