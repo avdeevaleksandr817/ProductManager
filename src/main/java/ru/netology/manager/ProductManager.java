@@ -6,23 +6,23 @@ import ru.netology.repository.Repository;
 
 public class ProductManager {
 
-    private Repository repository = new Repository();
+    private Repository repository;
 
+    //ProductManager конструктор которого будет принимать параметром репозиторий
     public ProductManager(Repository repository) {
+
         this.repository = repository;
     }
 
+    //метод добавления продуктов в репозиторий
     public void add(Product product) {
+
         repository.save(product);
     }
 
-    public Product[] findAll() {
-        Product[] product = repository.findAll();
-        return product;
-    }
-
+    //метод searchBy(String text), который возвращает массив найденных товаров
     public Product[] searchBy(String text) {
-
+        // тут будем хранить подошедшие запросу продукты
         Product[] result = new Product[0];
 
         for (Product product : repository.findAll()) {
@@ -38,11 +38,14 @@ public class ProductManager {
         return result;
     }
 
+    // метод определения соответствия товара product запросу search
     public static boolean matches(Product product, String search) {
         if (product.getTitle().contains(search)) {
             return true;
         } else {
             return false;
         }
+        // или в одну строку:
+        // return product.getName().contains(search);
     }
 }
