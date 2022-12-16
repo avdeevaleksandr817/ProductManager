@@ -1,20 +1,27 @@
 package ru.netology.repository;
 
 import ru.netology.domain.Product;
+import ru.netology.exception.AlreadyExistsException;
+import ru.netology.exception.NotFoundException;
 
 public class Repository {
     private Product[] items = new Product[0];
 
     //метод позволяющий сохранять Product
     public void save(Product item) {
-        Product[] tmp = new Product[items.length + 1];
-        for (int i = 0; i < items.length; i++) {
-            tmp[i] = items[i];
-        }
-        tmp[tmp.length - 1] = item;
-        items = tmp;
-    }
 
+        if (findById(item.getId()) != null) {
+            throw new AlreadyExistsException("Element with id " + item.getId() + " alredy exist.");
+        } else {
+            Product[] tmp = new Product[items.length + 1];
+
+            for (int i = 0; i < items.length; i++) {
+                tmp[i] = items[i];
+            }
+            tmp[tmp.length - 1] = item;
+            items = tmp;
+        }
+    }
     //метод получать все сохранённые Product
     public Product[] findAll() {
 
@@ -23,6 +30,10 @@ public class Repository {
 
     //метод удаления по идентификатору
     public void removeById(int id) {
+
+        if (findById(id) == null){
+            throw new NotFoundException(id);
+        }
 
         Product[] tmp = new Product[items.length - 1];
         int index = 0;
@@ -33,6 +44,15 @@ public class Repository {
             }
         }
         items = tmp;
+    }
+
+    public Product findById(int id) {
+        for (Product product : items) {
+            if (product.getId() == id) {
+                return product;
+            }
+        }
+        return null;
     }
 
     public Product[] getItems() {

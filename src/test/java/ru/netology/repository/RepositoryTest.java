@@ -1,11 +1,16 @@
 package ru.netology.repository;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import ru.netology.domain.Book;
 import ru.netology.domain.Product;
 import ru.netology.domain.Smartphone;
+import ru.netology.exception.AlreadyExistsException;
+import ru.netology.exception.NotFoundException;
+
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RepositoryTest {
     protected Book book1 = new Book(101, 900, "Тигровый, черный, золотой", "Елена Михалкова");
@@ -28,6 +33,7 @@ class RepositoryTest {
     }
 
     @Test
+    @DisplayName("Сохранение товара")
     void shouldSaveItems() {
 
         Book book4 = new Book(104, 1500, "Волкодав", "Мария Семенова");
@@ -36,20 +42,22 @@ class RepositoryTest {
         Product[] expected = {book1,book2,book3,smartphone1,smartphone2,smartphone3,book4};
         Product[] actual = repository.getItems();
 
-        Assertions.assertArrayEquals(expected,actual);
+        assertArrayEquals(expected,actual);
 
     }
 
     @Test
+    @DisplayName("поиск всех товаров")
     void shouldFindAllItems() {
 
         Product[] expected = repository.findAll();
         Product[] actual = repository.getItems();
 
-        Assertions.assertArrayEquals(expected,actual);
+        assertArrayEquals(expected,actual);
     }
 
     @Test
+    @DisplayName("удаление по корректному идентификатору")
     void shouldRemoveByIdItem() {
 
         repository.removeById(333);
@@ -57,7 +65,23 @@ class RepositoryTest {
         Product[] expected = {book1,book2,book3,smartphone1,smartphone2};
         Product[] actual = repository.getItems();
 
-        Assertions.assertArrayEquals(expected,actual);
+        assertArrayEquals(expected,actual);
+    }
+
+    @Test
+    @DisplayName("удаление по НЕ корректному идентификатору")
+    void shouldRemoveByNoCorrectIdItem() {
+    assertThrows(NotFoundException.class,
+            () -> repository.removeById(4)
+            );
+    }
+
+    @Test
+    @DisplayName("Не удалось добавить продукт")
+    void shouldAddProductFailed() {
+        assertThrows(AlreadyExistsException.class, () -> {
+            repository.save(book3);
+        });
     }
 
 }
